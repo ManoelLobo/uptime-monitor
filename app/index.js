@@ -26,14 +26,55 @@ const server = http.createServer((req, res) => {
   req.on('end', () => {
     buffer += decoder.end();
 
-    // send response
-    res.end('I hear you!\n');
+    // handle request
+    const chosenHandler =
+      typeof router[trimmedPath] !== 'undefined'
+        ? router[trimmedPath]
+        : router.notFound;
 
-    // log
-    console.log('Request payload:', buffer);
+    const data = {
+      trimmedPath,
+      queryStringObject,
+      method,
+      headers,
+      payload: buffer,
+    };
+
+    // route request
+    chosenHandler(data, (statusCode, payload) => {
+      statusCode = typeof statusCode === 'number' ? statusCode : 200;
+      payload = typeof payload === 'object' ? payload : {};
+
+      const payloadString = JSON.stringify(payload);
+
+      // send response
+      res.writeHead(statusCode);
+      res.end(payloadString);
+
+      // log
+      console.log('Response:', statusCode, payloadString);
+    });
   });
 });
 
 server.listen(3000, () => {
   console.log('Server listening on port 3000');
 });
+
+// Handlers
+const handlers = {};
+
+handlers.test = (data, cb) => {
+  // callback: HTTP status + payload
+  cb(406, { name: 'test handler' });
+};
+
+handlers.notFound = (data, cb) => {
+  cb(404);
+};
+
+// Request router
+const router = {
+  test: handlers.test,
+  notFound: handlers.notFound,
+};
