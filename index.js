@@ -1,9 +1,34 @@
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const stringDecoder = require('string_decoder').StringDecoder;
 const config = require('./config');
+const fs = require('fs');
 
-const server = http.createServer((req, res) => {
+// http server config & start
+const httpServer = http.createServer((req, res) => {
+  unifiedServer(req, res);
+});
+
+httpServer.listen(config.httpPort, () => {
+  console.log(`Server listening on port ${config.httpPort}`);
+});
+
+// https server config & start
+const httpsOptions = {
+  key: fs.readFileSync('./https/key.pem'),
+  cert: fs.readFileSync('./https/cert.pem'),
+};
+const httpsServer = https.createServer(httpsOptions, (req, res) => {
+  unifiedServer(req, res);
+});
+
+httpsServer.listen(config.httpsPort, () => {
+  console.log(`Server listening on port ${config.httpsPort}`);
+});
+
+// Shared server logic
+const unifiedServer = (req, res) => {
   // parse url
   const parsedUrl = url.parse(req.url, true);
 
@@ -57,13 +82,7 @@ const server = http.createServer((req, res) => {
       console.log('Response:', statusCode, payloadString);
     });
   });
-});
-
-server.listen(config.port, () => {
-  console.log(
-    `Server listening on port ${config.port} in ${config.envName} mode`,
-  );
-});
+};
 
 // Handlers
 const handlers = {};
