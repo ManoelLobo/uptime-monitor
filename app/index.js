@@ -9,6 +9,9 @@ const server = http.createServer((req, res) => {
   const path = parsedUrl.pathname;
   const trimmedPath = path.replace(/^\/+|\/+$/g, '');
 
+  // get query string (object)
+  const queryStringObject = parsedUrl.query;
+
   // get method
   const method = req.method.toLowerCase();
 
@@ -17,7 +20,8 @@ const server = http.createServer((req, res) => {
 
   // log
   console.log(
-    `Request received on path < ${trimmedPath} > with method < ${method} >`,
+    `Request received on path < ${trimmedPath} > with method < ${method} > and the following parameters:`,
+    queryStringObject,
   );
 });
 
