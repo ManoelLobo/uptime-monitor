@@ -87,9 +87,8 @@ const unifiedServer = (req, res) => {
 // Handlers
 const handlers = {};
 
-handlers.test = (data, cb) => {
-  // callback: HTTP status + payload
-  cb(406, { name: 'test handler' });
+handlers.ping = (data, cb) => {
+  cb(200);
 };
 
 handlers.notFound = (data, cb) => {
@@ -98,6 +97,6 @@ handlers.notFound = (data, cb) => {
 
 // Request router
 const router = {
-  test: handlers.test,
+  ping: handlers.ping,
   notFound: handlers.notFound,
 };
