@@ -15,14 +15,14 @@ const server = http.createServer((req, res) => {
   // get method
   const method = req.method.toLowerCase();
 
+  // get headers (object)
+  const headers = req.headers;
+
   // send response
   res.end('I hear you!\n');
 
   // log
-  console.log(
-    `Request received on path < ${trimmedPath} > with method < ${method} > and the following parameters:`,
-    queryStringObject,
-  );
+  console.log('Request headers:', headers);
 });
 
 server.listen(3000, () => {
