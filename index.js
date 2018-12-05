@@ -58,7 +58,7 @@ const unifiedServer = (req, res) => {
     const chosenHandler =
       typeof router[trimmedPath] !== 'undefined'
         ? router[trimmedPath]
-        : router.notFound;
+        : handlers.notFound;
 
     const data = {
       trimmedPath,
@@ -90,5 +90,4 @@ const unifiedServer = (req, res) => {
 const router = {
   ping: handlers.ping,
   users: handlers.users,
-  notFound: handlers.notFound,
 };
