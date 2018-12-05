@@ -2,8 +2,10 @@ const http = require('http');
 const https = require('https');
 const url = require('url');
 const stringDecoder = require('string_decoder').StringDecoder;
-const config = require('./config');
 const fs = require('fs');
+const config = require('./lib/config');
+const handlers = require('./lib/handlers');
+const helpers = require('./lib/helpers');
 
 // http server config & start
 const httpServer = http.createServer((req, res) => {
@@ -63,7 +65,7 @@ const unifiedServer = (req, res) => {
       queryStringObject,
       method,
       headers,
-      payload: buffer,
+      payload: helpers.parseJsonToObject(buffer),
     };
 
     // route request
@@ -84,19 +86,9 @@ const unifiedServer = (req, res) => {
   });
 };
 
-// Handlers
-const handlers = {};
-
-handlers.ping = (data, cb) => {
-  cb(200);
-};
-
-handlers.notFound = (data, cb) => {
-  cb(404);
-};
-
 // Request router
 const router = {
   ping: handlers.ping,
+  users: handlers.users,
   notFound: handlers.notFound,
 };
