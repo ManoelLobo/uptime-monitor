@@ -1,2 +1,3 @@
 *.pem
 .data/users/*.json
+.data/tokens/*.json
