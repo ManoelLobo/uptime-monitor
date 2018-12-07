@@ -1,4 +1,5 @@
 const server = require('./lib/server');
+const workers = require('./lib/workers');
 
 const app = {};
 
@@ -6,7 +7,7 @@ app.init = () => {
   // start server
   server.init();
   // start workers
-  // @TODO
+  workers.init();
 };
 
 // execute
