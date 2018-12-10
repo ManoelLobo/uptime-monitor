@@ -1,4 +1,6 @@
 *.pem
-.data/users/*.json
-.data/tokens/*.json
-.data/checks/*.json
+.data/users/*
+.data/tokens/*
+.data/checks/*
+.logs/*
+!.gitkeep
